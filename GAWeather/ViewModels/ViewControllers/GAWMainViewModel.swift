@@ -114,11 +114,14 @@ class GAWMainViewModel: ViewModel {
                                 }
                                 else if let error = error {
                                     self.privateErrorOccurred = error
+                                    self.privateOnWeatherChange = nil
                                 }
+                                self.privateOnLoading = false
                                 self.startRecording()
                             })
                     }
                     else {
+                        self.privateOnLoading = false
                         self.startRecording()
                     }
                     
@@ -130,7 +133,7 @@ class GAWMainViewModel: ViewModel {
     fileprivate func updateUI(weather: GAWWeatherResponse) {
         var weatherImage : UIImage?
         if let icon = weather.weather?[0].icon,
-            let imageUri = URL(string: "http://openweathermap.org/img/w/" + icon) {
+            let imageUri = URL(string: "https://openweathermap.org/img/w/\(icon).png") {
             let imageData : NSData? = try? NSData.init(contentsOf: imageUri, options: .mappedIfSafe)
             if let data = imageData as Data? {
                 weatherImage = UIImage(data: data)
@@ -139,12 +142,12 @@ class GAWMainViewModel: ViewModel {
         
         let cityString = weather.name ?? GAWStrings.unknown + (weather.sys?.country != nil ? "(\(weather.sys!.country!))" : "")
         let weatherString = (weather.weather != nil && weather.weather!.count > 0 && weather.weather![0].main != nil) ? weather.weather![0].main! : "-"
-        let temperatureString = weather.main?.temp != nil ? "\(weather.main!.temp! - 273.15)°C" : "-"
-        let humidityString = weather.main?.humidity != nil ? "\(weather.main!.humidity!)%" : "-"
+        let temperatureString = weather.main?.temp != nil ? "\((weather.main!.temp! - 273.15).roundAtDecimal(1))°C" : "-"
+        let humidityString = weather.main?.humidity != nil ? "\((weather.main!.humidity!).roundAtDecimal(1))%" : "-"
         
         let weatherInfo = WeatherInfo(weatherImage: weatherImage,
                            city: cityString,
-                           weather: weatherString,
+                           weather: GAWStrings.weather + ": " + weatherString,
                            temperature: GAWStrings.temperature + ": " + temperatureString,
                            humidity: GAWStrings.humidity + ": " + humidityString)
         self.privateOnWeatherChange = weatherInfo

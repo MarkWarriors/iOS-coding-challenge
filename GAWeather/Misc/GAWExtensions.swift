@@ -8,6 +8,13 @@
 
 import UIKit
 
+extension Double {
+    public func roundAtDecimal(_ decimal: Int) -> Double {
+        let approx = Double(10^(decimal+1))
+        return (self * approx).rounded() / approx
+    }
+}
+
 extension String {
     var localized: String {
         return NSLocalizedString(self, comment: "")
