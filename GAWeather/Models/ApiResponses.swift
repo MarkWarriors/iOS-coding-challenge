@@ -6,7 +6,7 @@
 //  Copyright © 2018 Marco Guerrieri. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 // response from openweathermap
 public class GAWWeatherResponse: Codable {
@@ -60,4 +60,33 @@ public class GAWWeatherResponse: Codable {
         var sunrise : Int?
         var sunset : Int?
     }
+    
+    public func getIconImage() -> UIImage? {
+        var image : UIImage?
+        if let icon = self.weather?[0].icon,
+            let imageUri = URL(string: "https://openweathermap.org/img/w/\(icon).png") {
+            let imageData : NSData? = try? NSData.init(contentsOf: imageUri, options: .mappedIfSafe)
+            if let data = imageData as Data? {
+                image = UIImage(data: data)
+            }
+        }
+        return image
+    }
+    
+    public func cityString() -> String {
+        return self.name ?? GAWStrings.unknown + (self.sys?.country != nil ? "(\(self.sys!.country!))" : "")
+    }
+    
+    public func weatherString() -> String {
+        return (self.weather != nil && self.weather!.count > 0 && self.weather![0].main != nil) ? self.weather![0].main! : "-"
+    }
+    
+    public func temperatureString() -> String {
+        return self.main?.temp != nil ? "\((self.main!.temp! - 273.15).roundAtDecimal(1))°C" : "-"
+    }
+    
+    public func humidityString() -> String {
+        return self.main?.humidity != nil ? "\((self.main!.humidity!).roundAtDecimal(1))%" : "-"
+    }
+    
 }
