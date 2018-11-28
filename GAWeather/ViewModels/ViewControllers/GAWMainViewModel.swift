@@ -10,7 +10,8 @@ import UIKit
 import Speech
 
 class GAWMainViewModel: ViewModel {
-
+    
+    private let audioQueue = DispatchQueue.init(label: "ga.weather.audioqueue")
     private let audioEngine = AVAudioEngine()
     private let speechRecognizer = SFSpeechRecognizer.init(locale: Locale.current)
     private let request = SFSpeechAudioBufferRecognitionRequest()
@@ -25,10 +26,11 @@ class GAWMainViewModel: ViewModel {
     }
     public var onErrorOccurred : ((GAWError)->())?
     
-    func viewDidAppear() {
+    public func viewDidAppear() {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             switch authStatus {
             case .authorized:
+                self.startVoiceRec()
                 break
             case .denied:
                 self.privateErrorOccurred = GAWError.with(localizedDescription: GAWStrings.speechUnauthorized)
@@ -43,4 +45,44 @@ class GAWMainViewModel: ViewModel {
         }
     }
     
+    fileprivate func startVoiceRec() {
+        if !audioEngine.isRunning {
+            mostRecentlyProcessedSegmentDuration = 0
+            self.startRecording()
+        }
+    }
+    
+    fileprivate func startRecording() {
+        audioQueue.async {
+            let node = self.audioEngine.inputNode
+            let recordingFormat = node.outputFormat(forBus: 0)
+            node.installTap(onBus: 0, bufferSize: 1024,
+                            format: recordingFormat) { [unowned self]
+                                (buffer, _) in
+                                self.request.append(buffer)
+            }
+            self.audioEngine.prepare()
+            do {
+                try self.audioEngine.start()
+            }
+            catch let error {
+                self.privateErrorOccurred = GAWError.with(localizedDescription: error.localizedDescription)
+                return
+            }
+            self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.request) { (result, error) in
+                if let transcription = result?.bestTranscription {
+                    print(transcription.formattedString)
+                }
+            }
+        }
+    }
+    
+    fileprivate func stopRecording() {
+        audioQueue.async {
+            self.audioEngine.stop()
+            self.request.endAudio()
+            self.recognitionTask?.cancel()
+            self.audioEngine.inputNode.removeTap(onBus: 0)
+        }
+    }
 }
