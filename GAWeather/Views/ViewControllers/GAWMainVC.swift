@@ -10,13 +10,24 @@ import UIKit
 
 class GAWMainVC: GAWViewController, ViewModelBased {
     typealias ViewModel = GAWMainViewModel
-    var viewModel: GAWMainViewModel?
+    var viewModel: GAWMainViewModel? = GAWMainViewModel()
 
+    @IBOutlet weak var cityLbl: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.bindViewModel()
+    }
 
     func bindViewModel() {
-        
+        viewModel?.onErrorOccurred = ({ (error) in
+            self.showAlertFor(error: error)
+        })
+        viewModel?.viewDidAppear()
     }
+    
 }

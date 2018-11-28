@@ -30,17 +30,18 @@ class ApiHandler {
             .responseData { (response) in
                 switch (response.result) {
                 case .success:
-                    var statusCode = 0
-                    var model : GAWWeatherResponse?
-                    if let unwrappedResponse = response.response {
-                        statusCode = unwrappedResponse.statusCode
-                        model = try? JSONDecoder.init().decode(GAWWeatherResponse.self, from: response.data!)
+                    let model : GAWWeatherResponse? = try? JSONDecoder.init().decode(GAWWeatherResponse.self, from: response.data!)
+                    
+                    if model != nil {
+                        callback?(model, nil)
                     }
-                    callback?(model, GAWError.checkErrorCode(statusCode))
+                    else{
+                        callback?(nil, GAWError.with(localizedDescription: GAWStrings.unknownError))
+                    }
                     break
                 case .failure:
-                    let statusCode = response.response?.statusCode ?? 0
-                    callback?(nil, GAWError.checkErrorCode(statusCode))
+                    // TODO: improve errors from status code
+                    callback?(nil, GAWError.with(localizedDescription: GAWStrings.errorGeneric))
                     break
                 }
         }

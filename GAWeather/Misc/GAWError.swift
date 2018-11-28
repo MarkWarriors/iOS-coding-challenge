@@ -8,29 +8,13 @@
 
 import Foundation
 
-enum GAWError: Error {
-    case unknownError
-    case connectionError
-    case invalidCredentials
-    case invalidRequest
-    case notFound
-    case invalidResponse
-    case serverError
-    case serverUnavailable
-    case timeOut
-    case unsuppotedURL
-    
-    static func checkErrorCode(_ errorCode: Int) -> GAWError {
-        switch errorCode {
-        case 400:
-            return .invalidRequest
-        case 401:
-            return .invalidCredentials
-        case 404:
-            return .notFound
-        default:
-            return .unknownError
-        }
+
+class GAWError: Error {
+
+    static func with(domain: String = "mg.weather", code: Int = 0, localizedDescription: String) -> GAWError {
+        return NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey : localizedDescription]) as! GAWError
     }
+    
 }
+
 
