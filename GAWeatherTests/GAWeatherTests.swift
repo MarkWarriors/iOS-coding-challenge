@@ -19,7 +19,7 @@ class GAWeatherTests: XCTestCase {
 
     func testExample() {
         let expectation = self.expectation(description: "fetchDataCompleted")
-        let api = ApiHandler.init(environment: Environments.testEnvironment)
+        let api = ApiHandler.init(environment: Environments.testEnv)
         api.getWeatherFor(city: "Berlin") { (response, error) in
             if let response = response {
                 expectation.fulfill()

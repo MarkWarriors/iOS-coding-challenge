@@ -20,7 +20,7 @@ class ApiHandler {
     }
     
     fileprivate func weatherForCity(_ city: String) -> URL {
-        return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city)!
+        return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city.replacingOccurrences(of: " ", with: "+").trimmingCharacters(in: .urlQueryAllowed))!
     }
     
     public func getWeatherFor(city: String, callback: ((GAWWeatherResponse?, GAWError?)->())?){
@@ -36,12 +36,12 @@ class ApiHandler {
                         callback?(model, nil)
                     }
                     else{
-                        callback?(nil, GAWError.with(localizedDescription: GAWStrings.unknownError))
+                        callback?(nil, GAWError(localizedDescription: GAWStrings.unknownError))
                     }
                     break
                 case .failure:
                     // TODO: improve errors from status code
-                    callback?(nil, GAWError.with(localizedDescription: GAWStrings.errorGeneric))
+                    callback?(nil, GAWError(localizedDescription: GAWStrings.errorGeneric))
                     break
                 }
         }

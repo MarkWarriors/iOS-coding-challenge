@@ -13,6 +13,7 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     var viewModel: GAWMainViewModel? = GAWMainViewModel()
 
     @IBOutlet weak var cityLbl: UILabel!
+    @IBOutlet weak var loadingAI: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +25,21 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     }
 
     func bindViewModel() {
-        viewModel?.onErrorOccurred = ({ (error) in
+        viewModel?.onErrorOccurred = { error in
             self.showAlertFor(error: error)
-        })
+        }
+        
+        viewModel?.onLoading = { loading in
+            DispatchQueue.main.async {
+                if loading {
+                    self.loadingAI.startAnimating()
+                }
+                else {
+                    self.loadingAI.stopAnimating()
+                }
+            }
+        }
+        
         viewModel?.viewDidAppear()
     }
     

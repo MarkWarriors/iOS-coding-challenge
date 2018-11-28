@@ -24,8 +24,17 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(eg. say &quot;weather in Paris&quot;)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0sp-Xv-UaC">
+                                <rect key="frame" x="16" y="72" width="343" height="14.5"/>
+                                <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Uyf-bY-D2M">
+                                <rect key="frame" x="177.5" y="333.5" width="20" height="20"/>
+                            </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="City" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPa-1A-hYZ">
-                                <rect key="frame" x="16" y="84" width="343" height="21.5"/>
+                                <rect key="frame" x="16" y="102.5" width="343" height="21.5"/>
                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -34,15 +43,21 @@
                         <color key="backgroundColor" red="0.21298569540000001" green="0.29937231050000002" blue="0.5975372779" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dPa-1A-hYZ" secondAttribute="trailing" constant="16" id="2CA-ob-3Lq"/>
-                            <constraint firstItem="dPa-1A-hYZ" firstAttribute="top" secondItem="qSr-BC-biD" secondAttribute="bottom" constant="16" id="3VZ-nO-LYN"/>
+                            <constraint firstItem="dPa-1A-hYZ" firstAttribute="top" secondItem="0sp-Xv-UaC" secondAttribute="bottom" constant="16" id="FbL-5m-VkX"/>
                             <constraint firstItem="qSr-BC-biD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="24" id="LtE-pj-osL"/>
                             <constraint firstItem="dPa-1A-hYZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="UU6-99-mWl"/>
+                            <constraint firstItem="0sp-Xv-UaC" firstAttribute="top" secondItem="qSr-BC-biD" secondAttribute="bottom" constant="4" id="VDI-d8-82o"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0sp-Xv-UaC" secondAttribute="trailing" constant="16" id="Wh4-oB-ebZ"/>
+                            <constraint firstItem="0sp-Xv-UaC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="a0L-TA-QEw"/>
+                            <constraint firstItem="Uyf-bY-D2M" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="gE1-mK-YUW"/>
                             <constraint firstItem="qSr-BC-biD" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="gPk-Uc-uTA"/>
+                            <constraint firstItem="Uyf-bY-D2M" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ksW-aZ-8c1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="cityLbl" destination="dPa-1A-hYZ" id="3QN-fT-p6n"/>
+                        <outlet property="loadingAI" destination="Uyf-bY-D2M" id="tvv-AX-9Il"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

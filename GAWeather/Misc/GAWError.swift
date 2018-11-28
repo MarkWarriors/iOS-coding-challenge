@@ -9,12 +9,14 @@
 import Foundation
 
 
-class GAWError: Error {
-
-    static func with(domain: String = "mg.weather", code: Int = 0, localizedDescription: String) -> GAWError {
-        return NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey : localizedDescription]) as! GAWError
+class GAWError: NSError {
+    init(domain: String = "mg.weather", code: Int = 0, localizedDescription: String) {
+        super.init(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey : localizedDescription])
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 }
 
 
