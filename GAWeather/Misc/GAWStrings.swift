@@ -20,6 +20,7 @@ class GAWStrings {
     public static let humidity : String = "Humidity".localized
     
     // MARK: Errors Strings
+    public static let audioEngineRunning : String = "Audio engine is already running".localized
     public static let errorGeneric : String = "An error occurred".localized
     public static let unknownError : String = "Unknown Error".localized
     public static let connectionError : String = "Connection Error".localized

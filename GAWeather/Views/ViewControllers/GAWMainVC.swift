@@ -19,6 +19,7 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     @IBOutlet weak var humidityLbl: UILabel!
     @IBOutlet weak var cityLbl: UILabel!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var transcriptionLbl: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,7 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.weatherView.alpha = 0
         self.bindViewModel()
     }
 
@@ -46,14 +48,24 @@ class GAWMainVC: GAWViewController, ViewModelBased {
             }
         }
         
+        viewModel?.onTranscriptionChange = { text in
+            DispatchQueue.main.async {
+                self.transcriptionLbl.text = text
+            }
+        }
+        
         viewModel?.onWeatherChange = { info in
-            self.weatherView.isHidden = (info == nil)
-            if let info = info {
-                self.weatherImageView.image = info.weatherImage
-                self.cityLbl.text = info.city
-                self.weatherLbl.text = info.weather
-                self.temperatureLbl.text = info.temperature
-                self.humidityLbl.text = info.humidity
+            DispatchQueue.main.async {
+                if let info = info {
+                    self.weatherImageView.image = info.weatherImage
+                    self.cityLbl.text = info.city
+                    self.weatherLbl.text = info.weather
+                    self.temperatureLbl.text = info.temperature
+                    self.humidityLbl.text = info.humidity
+                }
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.weatherView.alpha = (info != nil ? 1.0 : 0.0)
+                })
             }
         }
         

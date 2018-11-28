@@ -43,9 +43,16 @@ class GAWMainViewModel: ViewModel {
         }
     }
     
+    private var privateTranscription : String = "" {
+        didSet {
+            self.onTranscriptionChange?(privateTranscription)
+        }
+    }
+    
     public var onErrorOccurred : ((GAWError)->())?
     public var onLoading : ((Bool)->())?
     public var onWeatherChange : ((WeatherInfo?)->())?
+    public var onTranscriptionChange : ((String)->())?
     
     
     public func viewDidAppear() {
@@ -65,12 +72,17 @@ class GAWMainViewModel: ViewModel {
                 break
             }
         }
+        self.privateTranscription = ""
     }
     
     
     fileprivate func startRecording() {
+        self.privateTranscription = ""
+        self.privateOnLoading = false
+        
         if audioEngine.isRunning {
-            self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.errorGeneric)
+            self.stopRecording()
+            self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.audioEngineRunning)
             return
         }
         mostRecentlyProcessedSegmentDuration = 0
@@ -94,7 +106,7 @@ class GAWMainViewModel: ViewModel {
 
             self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.recognitionRequest) { (result, error) in
                 if let transcription = result?.bestTranscription {
-                    print("TRANSCR: " + transcription.formattedString)
+                    self.privateTranscription = transcription.formattedString
                     self.privateOnLoading = true
                 }
                 self.speechSilenceTimer.invalidate()
@@ -110,16 +122,13 @@ class GAWMainViewModel: ViewModel {
                                 if let weather = weather {
                                     self.updateUI(weather: weather)
                                 }
-                                else if let error = error {
-                                    self.privateErrorOccurred = error
+                                else {
                                     self.privateWeatherInfo = nil
                                 }
-                                self.privateOnLoading = false
                                 self.startRecording()
                             })
                     }
                     else {
-                        self.privateOnLoading = false
                         self.startRecording()
                     }
                     

@@ -21,8 +21,9 @@ class GAWViewController: UIViewController {
         let okBtn = UIAlertAction.init(title: GAWStrings.ok, style: UIAlertAction.Style.default)
         
         alert.addAction(okBtn)
-        
-        self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
         
     }
 }

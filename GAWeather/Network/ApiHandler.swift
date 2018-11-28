@@ -46,7 +46,7 @@ class ApiHandler {
                     break
                 case .failure:
                     // TODO: improve errors from status code
-                    callback?(nil, GAWError(localizedDescription: GAWStrings.errorGeneric))
+                    callback?(nil, GAWError(localizedDescription: GAWStrings.invalidRequest))
                     break
                 }
         }
