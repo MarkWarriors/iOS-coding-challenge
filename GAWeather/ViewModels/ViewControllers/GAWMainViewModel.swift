@@ -11,10 +11,12 @@ import Speech
 
 class GAWMainViewModel: ViewModel {
     
-    private let audioQueue = DispatchQueue.init(label: "ga.weather.audioqueue")
+    private static let speechTimerSilenceTimeout = 2.0
+    private var speechSilenceTimer = Timer()
+    private let audioQueue = DispatchQueue.init(label: "ga.weather.audioqueue", qos: DispatchQoS.userInteractive, attributes: .concurrent)
     private let audioEngine = AVAudioEngine()
     private let speechRecognizer = SFSpeechRecognizer.init(locale: Locale.current)
-    private let request = SFSpeechAudioBufferRecognitionRequest()
+    private var recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
     private var recognitionTask: SFSpeechRecognitionTask?
     private var mostRecentlyProcessedSegmentDuration: TimeInterval = 0
     private var privateErrorOccurred : GAWError? {
@@ -30,7 +32,7 @@ class GAWMainViewModel: ViewModel {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             switch authStatus {
             case .authorized:
-                self.startVoiceRec()
+                self.startRecording()
                 break
             case .denied:
                 self.privateErrorOccurred = GAWError.with(localizedDescription: GAWStrings.speechUnauthorized)
@@ -45,21 +47,21 @@ class GAWMainViewModel: ViewModel {
         }
     }
     
-    fileprivate func startVoiceRec() {
-        if !audioEngine.isRunning {
-            mostRecentlyProcessedSegmentDuration = 0
-            self.startRecording()
-        }
-    }
     
     fileprivate func startRecording() {
-        audioQueue.async {
+        if audioEngine.isRunning {
+            self.privateErrorOccurred = GAWError.with(localizedDescription: GAWStrings.errorGeneric)
+            return
+        }
+        mostRecentlyProcessedSegmentDuration = 0
+        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        audioQueue.sync {
             let node = self.audioEngine.inputNode
             let recordingFormat = node.outputFormat(forBus: 0)
             node.installTap(onBus: 0, bufferSize: 1024,
                             format: recordingFormat) { [unowned self]
                                 (buffer, _) in
-                                self.request.append(buffer)
+                                self.recognitionRequest.append(buffer)
             }
             self.audioEngine.prepare()
             do {
@@ -69,18 +71,23 @@ class GAWMainViewModel: ViewModel {
                 self.privateErrorOccurred = GAWError.with(localizedDescription: error.localizedDescription)
                 return
             }
-            self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.request) { (result, error) in
+            self.recognitionTask = self.speechRecognizer?.recognitionTask(with: self.recognitionRequest) { (result, error) in
                 if let transcription = result?.bestTranscription {
                     print(transcription.formattedString)
                 }
+                self.speechSilenceTimer.invalidate()
+                self.speechSilenceTimer = Timer.scheduledTimer(withTimeInterval: GAWMainViewModel.speechTimerSilenceTimeout, repeats: false, block: { (timer) in
+                    self.stopRecording()
+                    self.startRecording()
+                })
             }
         }
     }
     
     fileprivate func stopRecording() {
-        audioQueue.async {
+        audioQueue.sync {
             self.audioEngine.stop()
-            self.request.endAudio()
+            self.recognitionRequest.endAudio()
             self.recognitionTask?.cancel()
             self.audioEngine.inputNode.removeTap(onBus: 0)
         }
