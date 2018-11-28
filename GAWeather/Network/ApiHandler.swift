@@ -20,7 +20,7 @@ class ApiHandler {
     }
     
     fileprivate func weatherForCity(_ city: String) -> URL {
-        return URL(string: "\(self.environment.baseUrl)weather?APPID=\(self.environment.apikey)&q=\(city)")!
+        return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city)!
     }
     
     public func getWeatherFor(city: String, callback: ((GAWWeatherResponse?, GAWError?)->())?){

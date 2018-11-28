@@ -14,7 +14,7 @@ public class GAWWeatherResponse: Codable {
     var weather : [GAWWeatherInfo]?
     var base : String?
     var main : GAWWeatherMain?
-    var visibility : Int?
+    var visibility : Double?
     var wind : GAWWeatherWind?
     var clouds : GAWWeatherClouds?
     var dt : Int?
@@ -44,11 +44,12 @@ public class GAWWeatherResponse: Codable {
     }
     
     class GAWWeatherWind : Codable {
-        var speed : Int?
+        var speed : Double?
+        var deg : Double?
     }
     
     class GAWWeatherClouds : Codable {
-        var all : Int?
+        var all : Double?
     }
 
     class GAWWeatherSys : Codable {
