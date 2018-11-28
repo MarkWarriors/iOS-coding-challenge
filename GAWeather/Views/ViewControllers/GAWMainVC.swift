@@ -12,12 +12,18 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     typealias ViewModel = GAWMainViewModel
     var viewModel: GAWMainViewModel? = GAWMainViewModel()
 
+    @IBOutlet weak var weatherView: UIView!
+    @IBOutlet weak var weatherImageView: UIImageView!
+    @IBOutlet weak var weatherLbl: UILabel!
+    @IBOutlet weak var temperatureLbl: UILabel!
+    @IBOutlet weak var humidityLbl: UILabel!
     @IBOutlet weak var cityLbl: UILabel!
-    @IBOutlet weak var loadingAI: UIActivityIndicatorView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -32,11 +38,22 @@ class GAWMainVC: GAWViewController, ViewModelBased {
         viewModel?.onLoading = { loading in
             DispatchQueue.main.async {
                 if loading {
-                    self.loadingAI.startAnimating()
+                    self.loadingIndicator.startAnimating()
                 }
                 else {
-                    self.loadingAI.stopAnimating()
+                    self.loadingIndicator.stopAnimating()
                 }
+            }
+        }
+        
+        viewModel?.onWeatherChange = { info in
+            self.weatherView.isHidden = (info == nil)
+            if let info = info {
+                self.weatherImageView.image = info.weatherImage
+                self.cityLbl.text = info.city
+                self.weatherLbl.text = info.weather
+                self.temperatureLbl.text = info.temperature
+                self.humidityLbl.text = info.humidity
             }
         }
         

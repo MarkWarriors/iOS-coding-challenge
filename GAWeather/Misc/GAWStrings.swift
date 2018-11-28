@@ -14,6 +14,10 @@ class GAWStrings {
     public static let loading : String = "Loading".localized
     public static let ok : String = "Ok".localized
     public static let error : String = "Error".localized
+    public static let unknown : String = "unknown".localized
+    public static let weather : String = "Weather".localized
+    public static let temperature : String = "Temperature".localized
+    public static let humidity : String = "Humidity".localized
     
     // MARK: Errors Strings
     public static let errorGeneric : String = "An error occurred".localized

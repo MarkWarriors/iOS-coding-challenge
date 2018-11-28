@@ -19,12 +19,17 @@ class ApiHandler {
         self.sessionManager = SessionManager.init()
     }
     
-    fileprivate func weatherForCity(_ city: String) -> URL {
-        return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city.replacingOccurrences(of: " ", with: "+").trimmingCharacters(in: .urlQueryAllowed))!
+    fileprivate func uriWeatherForCity(_ city: String) -> URL {
+        let city = city
+            .replacingOccurrences(of: " ", with: "+")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city)!
     }
     
     public func getWeatherFor(city: String, callback: ((GAWWeatherResponse?, GAWError?)->())?){
-        let uri = self.weatherForCity(city)
+        let uri = self.uriWeatherForCity(city)
+        print(uri)
         self.sessionManager.request(uri, method: .get)
             .validate()
             .responseData { (response) in
