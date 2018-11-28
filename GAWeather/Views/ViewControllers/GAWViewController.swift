@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  GAWViewController.swift
 //  GAWeather
 //
 //  Created by Marco Guerrieri on 28/11/18.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class GAWViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
     }
 
 
