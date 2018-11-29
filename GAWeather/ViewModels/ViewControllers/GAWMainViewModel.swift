@@ -69,8 +69,8 @@ class GAWMainViewModel: ViewModel {
             if let regex = regex,
                 let match = regex.firstMatch(in: command as String, options: [], range: NSMakeRange(0, command.length)) {
                 let city = command.substring(from: match.range(at: 0).location + match.range(at: 0).length)
-                
-                self.weatherForCity(city, callback: { (weather, error) in
+                // TODO: call a service to see if it can find a city in a different language and translate into the locale (en) needed by openweather
+                self.apiHandler.getWeatherFor(city: city, callback: { (weather, error) in
                     if let weather = weather {
                         self.updateUI(weather: weather)
                     }
@@ -99,10 +99,6 @@ class GAWMainViewModel: ViewModel {
                             temperature: GAWStrings.Weather.temperature + ": " + weather.temperatureString(),
                             humidity: GAWStrings.Weather.humidity + ": " + weather.humidityString())
         self.privateWeatherInfo = weatherInfo
-    }
-    
-    fileprivate func weatherForCity(_ city: String, callback: ((GAWWeather?, GAWError?)->())?){
-        self.apiHandler.getWeatherFor(city: city, callback: callback)
     }
     
 }

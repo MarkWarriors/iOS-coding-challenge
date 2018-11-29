@@ -16,7 +16,9 @@ class GAWMainViewModelTest: XCTestCase {
     override func setUp() {
         let environment = Environments.testEnv
         let apiHandler = ApiHandler.init(environment: environment)
-        viewModel = GAWMainViewModel.init(apiHandler: apiHandler)
+        let speechRecognizer = GAWSpeechRecognizer.init()
+        viewModel = GAWMainViewModel.init(apiHandler: apiHandler, speechRecognizer: speechRecognizer)
+        
     }
     
     override func tearDown() {
@@ -24,7 +26,7 @@ class GAWMainViewModelTest: XCTestCase {
     }
     
     func testViewModel() {
-        
+        // TODO TEST Implementing also a fake speech recognizer that provide fake transcript and see if the results are correct
     }
     
 }

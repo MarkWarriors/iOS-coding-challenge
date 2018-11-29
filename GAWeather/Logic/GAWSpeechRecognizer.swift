@@ -11,6 +11,8 @@ import Speech
 
 public class GAWSpeechRecognizer {
     
+    //TODO implements locale
+    
     private static let speechTimerSilenceTimeout = 1.5
     private var speechSilenceTimer = Timer()
     private let audioQueue = DispatchQueue.init(label: "ga.weather.audioqueue", qos: DispatchQoS.userInteractive, attributes: .concurrent)
@@ -77,7 +79,6 @@ public class GAWSpeechRecognizer {
         
         if audioEngine.isRunning {
             self.stopListening()
-            self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.Errors.audioEngineRunning)
             return
         }
         mostRecentlyProcessedSegmentDuration = 0
