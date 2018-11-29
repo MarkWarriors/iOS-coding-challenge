@@ -29,6 +29,10 @@ class GAWMainVC: GAWViewController, ViewModelBased {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.view.accessibilityIdentifier = "mainView"
+        self.weatherView.accessibilityIdentifier = "weatherView"
+        self.loadingIndicator.accessibilityIdentifier = "loadingIndicator"
+        self.transcriptionLbl.accessibilityIdentifier = "transcriptionLbl"
         self.weatherView.alpha = 0
         self.bindViewModel()
     }
