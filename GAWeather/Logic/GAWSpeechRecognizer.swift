@@ -56,20 +56,19 @@ public class GAWSpeechRecognizer {
     
     
     public func startListening(){
-        SFSpeechRecognizer.requestAuthorization { (authStatus) in
-            switch authStatus {
-            case .authorized:
-                self.privateStartListening()
-                break
-            case .denied:
-                self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.Errors.speechUnauthorized)
-                break
-            case .restricted:
-                self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.Errors.speechUnavailable)
-                break
-            case .notDetermined:
-                self.privateErrorOccurred = GAWError(localizedDescription: GAWStrings.Errors.speechUndetermined)
-                break
+        GAWDevicePermission.requestMicrophoneUsage { (authorized, error) in
+            if authorized {
+                GAWDevicePermission.requestSpeechRecognizerUsage(callback: { (authorized, error) in
+                    if authorized {
+                        self.privateStartListening()
+                    }
+                    else {
+                        self.privateErrorOccurred = GAWError(localizedDescription: error ?? GAWStrings.Errors.errorGeneric)
+                    }
+                })
+            }
+            else {
+                self.privateErrorOccurred = GAWError(localizedDescription: error ?? GAWStrings.Errors.errorGeneric)
             }
         }
     }

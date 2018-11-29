@@ -1,5 +1,5 @@
 //
-//  ApiHandler.swift
+//  GAWWeatherApiHandler.swift
 //  GAWeather
 //
 //  Created by Marco Guerrieri on 28/11/18.
@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class ApiHandler {
+class GAWWeatherApiHandler {
     
     private let environment: Environment
     private let sessionManager : SessionManager
@@ -29,7 +29,6 @@ class ApiHandler {
     
     public func getWeatherFor(city: String, callback: ((GAWWeather?, GAWError?)->())?){
         let uri = self.uriWeatherForCity(city)
-        print(uri)
         self.sessionManager.request(uri, method: .get)
             .validate()
             .responseData { (response) in

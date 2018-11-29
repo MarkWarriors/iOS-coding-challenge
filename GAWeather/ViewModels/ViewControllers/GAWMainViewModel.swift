@@ -10,7 +10,8 @@ import UIKit
 
 class GAWMainViewModel {
     
-    private let apiHandler : ApiHandler
+    private let apiHandler : GAWWeatherApiHandler
+    private let commandParser : GAWCommandParser
     private let speechRecognizer : GAWSpeechRecognizer
     
     private static let weatherRegex = "weather (in|at|for|from) "
@@ -48,28 +49,28 @@ class GAWMainViewModel {
     public var onTranscriptionChange : ((String?)->())?
     
     
-    init(apiHandler: ApiHandler,
-         speechRecognizer: GAWSpeechRecognizer) {
+    init(apiHandler: GAWWeatherApiHandler,
+         speechRecognizer: GAWSpeechRecognizer,
+         commandParser: GAWCommandParser) {
         self.apiHandler = apiHandler
         self.speechRecognizer = speechRecognizer
+        self.commandParser = commandParser
         
-        self.speechRecognizer.onLoading = { loading in
-            self.privateOnLoading = loading
+        self.speechRecognizer.onLoading = { [weak self] loading in
+            self?.privateOnLoading = loading
         }
-        self.speechRecognizer.onTranscriptionChanged = { text in
-            self.privateTranscriptionChange = text
-        }
-        
-        self.speechRecognizer.onErrorOccurred = { error in
-            self.privateErrorOccurred = error
+        self.speechRecognizer.onTranscriptionChanged = { [weak self] text in
+            self?.privateTranscriptionChange = text
         }
         
-        self.speechRecognizer.onCommandReceived = { command in
-            let regex = try? NSRegularExpression(pattern: GAWMainViewModel.weatherRegex, options: [])
-            if let regex = regex,
-                let match = regex.firstMatch(in: command as String, options: [], range: NSMakeRange(0, command.length)) {
-                let city = command.substring(from: match.range(at: 0).location + match.range(at: 0).length)
-                // TODO: call a service to see if it can find a city in a different language and translate into the locale (en) needed by openweather
+        self.speechRecognizer.onErrorOccurred = { [weak self] error in
+            self?.privateErrorOccurred = error
+        }
+        
+        self.speechRecognizer.onCommandReceived = { [weak self] command in
+            guard let self = self else { return }
+            let operation = self.commandParser.parse(command) as? GAWWeatherOperation
+            if let city = operation?.city {
                 self.apiHandler.getWeatherFor(city: city, callback: { (weather, error) in
                     if let weather = weather {
                         self.updateUI(weather: weather)

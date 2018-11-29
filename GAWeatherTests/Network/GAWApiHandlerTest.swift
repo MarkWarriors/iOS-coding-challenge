@@ -11,10 +11,10 @@ import XCTest
 
 class GAWApiHandlerTest: XCTestCase {
     
-    var apiHandler : ApiHandler?
+    var apiHandler : GAWWeatherApiHandler?
     
     override func setUp() {
-        apiHandler = ApiHandler.init(environment: Environments.testEnv)
+        apiHandler = GAWWeatherApiHandler.init(environment: Environments.testEnv)
     }
     
     override func tearDown() {

@@ -15,9 +15,12 @@ class GAWMainViewModelTest: XCTestCase {
     
     override func setUp() {
         let environment = Environments.testEnv
-        let apiHandler = ApiHandler.init(environment: environment)
+        let apiHandler = GAWWeatherApiHandler.init(environment: environment)
         let speechRecognizer = GAWSpeechRecognizer.init()
-        viewModel = GAWMainViewModel.init(apiHandler: apiHandler, speechRecognizer: speechRecognizer)
+        let commandParser = GAWCommandParser.init()
+        viewModel = GAWMainViewModel.init(apiHandler: apiHandler,
+                                          speechRecognizer: speechRecognizer,
+                                          commandParser: commandParser)
         
     }
     

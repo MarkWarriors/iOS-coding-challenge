@@ -42,6 +42,7 @@ struct GAWStrings {
         public static let speechUnauthorized : String = "Speech Recognition Unauthorized".localized
         public static let speechUnavailable : String = "Speech Recognition Unavailable".localized
         public static let speechUndetermined : String = "Speech Recognition Undetermined".localized
+        public static let microphoneUnauthorized : String = "Microphone use Unauthorized".localized
     }
 }
     
