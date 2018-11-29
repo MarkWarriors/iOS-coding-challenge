@@ -40,7 +40,7 @@ class GAWWeatherApiHandler {
                         callback?(model, nil)
                     }
                     else{
-                        callback?(nil, GAWError(localizedDescription: GAWStrings.Errors.unknownError))
+                        callback?(nil, GAWError(localizedDescription: GAWStrings.Errors.cityNotFoundError))
                     }
                     break
                 case .failure:

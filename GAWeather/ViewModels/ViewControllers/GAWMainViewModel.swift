@@ -78,6 +78,11 @@ class GAWMainViewModel {
                     else {
                         self.privateWeatherInfo = nil
                     }
+                    
+                    if let error = error {
+                        self.privateErrorOccurred = error
+                    }
+                    
                     self.speechRecognizer.startListening()
                 })
             }

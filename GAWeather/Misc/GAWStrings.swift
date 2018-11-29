@@ -30,6 +30,7 @@ struct GAWStrings {
         public static let audioEngineRunning : String = "Audio engine is already running".localized
         public static let errorGeneric : String = "An error occurred".localized
         public static let unknownError : String = "Unknown Error".localized
+        public static let cityNotFoundError : String = "City not found".localized
         public static let connectionError : String = "Connection Error".localized
         public static let invalidCredentials : String = "Invalid Credentials".localized
         public static let invalidRequest : String = "Invalid Request".localized
