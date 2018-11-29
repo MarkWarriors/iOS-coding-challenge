@@ -8,9 +8,6 @@
 
 import Foundation
 
-public struct GAWRegex {
-    public static let weatherRegex = "weather (in|at|for|from) "
-}
 
 public class GAWCommandParser {
 
@@ -21,17 +18,17 @@ public class GAWCommandParser {
     
     init() {
         self.operationsList = [
-            ({ GAWWeatherOperation(commandText: $0) }, GAWRegex.weatherRegex),
+            ({ GAWWeatherOperation(commandText: $0) }, GAWWeatherOperation.regex),
         ]
     }
     
-    public func parse(_ command: NSString) -> GAWOperation {
+    public func parse(_ command: NSString) -> (Any & GAWOperation)? {
         for (operation, pattern) in operationsList {
             if (command as String).range(of: pattern, options: .regularExpression) != nil {
                 return operation(command)
             }
         }
-        return GAWOperation.init(commandText: command)
+        return nil
     }
     
 }
