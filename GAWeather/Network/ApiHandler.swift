@@ -27,7 +27,7 @@ class ApiHandler {
         return URL(string: environment.baseUrl + "weather?APPID=" + environment.apikey + "&q=" + city)!
     }
     
-    public func getWeatherFor(city: String, callback: ((GAWWeatherResponse?, GAWError?)->())?){
+    public func getWeatherFor(city: String, callback: ((GAWWeather?, GAWError?)->())?){
         let uri = self.uriWeatherForCity(city)
         print(uri)
         self.sessionManager.request(uri, method: .get)
@@ -35,18 +35,18 @@ class ApiHandler {
             .responseData { (response) in
                 switch (response.result) {
                 case .success:
-                    let model : GAWWeatherResponse? = try? JSONDecoder.init().decode(GAWWeatherResponse.self, from: response.data!)
+                    let model : GAWWeather? = try? JSONDecoder.init().decode(GAWWeather.self, from: response.data!)
                     
                     if model != nil {
                         callback?(model, nil)
                     }
                     else{
-                        callback?(nil, GAWError(localizedDescription: GAWStrings.unknownError))
+                        callback?(nil, GAWError(localizedDescription: GAWStrings.Errors.unknownError))
                     }
                     break
                 case .failure:
                     // TODO: improve errors from status code
-                    callback?(nil, GAWError(localizedDescription: GAWStrings.invalidRequest))
+                    callback?(nil, GAWError(localizedDescription: GAWStrings.Errors.invalidRequest))
                     break
                 }
         }

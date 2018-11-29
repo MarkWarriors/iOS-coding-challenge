@@ -9,7 +9,7 @@
 import UIKit
 
 // response from openweathermap
-public class GAWWeatherResponse: Codable {
+public class GAWWeather: Codable {
     var coord : GAWWeatherCoord?
     var weather : [GAWWeatherInfo]?
     var base : String?
@@ -74,7 +74,7 @@ public class GAWWeatherResponse: Codable {
     }
     
     public func cityString() -> String {
-        return self.name ?? GAWStrings.unknown + (self.sys?.country != nil ? "(\(self.sys!.country!))" : "")
+        return self.name ?? GAWStrings.Commons.unknown + (self.sys?.country != nil ? "(\(self.sys!.country!))" : "")
     }
     
     public func weatherString() -> String {

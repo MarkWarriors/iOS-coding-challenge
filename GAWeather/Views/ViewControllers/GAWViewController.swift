@@ -16,9 +16,9 @@ class GAWViewController: UIViewController {
     }
 
     func showAlertFor(error: GAWError){
-        let alert = UIAlertController.init(title: GAWStrings.error, message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController.init(title: GAWStrings.Commons.error, message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
         
-        let okBtn = UIAlertAction.init(title: GAWStrings.ok, style: UIAlertAction.Style.default)
+        let okBtn = UIAlertAction.init(title: GAWStrings.Commons.ok, style: UIAlertAction.Style.default)
         
         alert.addAction(okBtn)
         DispatchQueue.main.async {

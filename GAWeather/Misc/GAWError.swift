@@ -9,7 +9,7 @@
 import Foundation
 
 
-class GAWError: NSError {
+public class GAWError: NSError {
     init(domain: String = "mg.weather", code: Int = 0, localizedDescription: String) {
         super.init(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey : localizedDescription])
     }

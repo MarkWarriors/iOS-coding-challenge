@@ -10,7 +10,8 @@ import UIKit
 
 class GAWMainVC: GAWViewController, ViewModelBased {
     typealias ViewModel = GAWMainViewModel
-    var viewModel: GAWMainViewModel? = GAWMainViewModel()
+    var viewModel: GAWMainViewModel? = GAWMainViewModel(apiHandler: ApiHandler.init(environment: Environments.testEnv),
+                                                        speechRecognizer: GAWSpeechRecognizer())
 
     @IBOutlet weak var weatherView: UIView!
     @IBOutlet weak var weatherImageView: UIImageView!
