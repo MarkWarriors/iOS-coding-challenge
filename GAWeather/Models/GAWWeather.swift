@@ -82,11 +82,11 @@ public class GAWWeather: Codable {
     }
     
     public func temperatureString() -> String {
-        return self.main?.temp != nil ? "\((self.main!.temp! - 273.15).roundAtDecimal(1))°C" : "-"
+        return self.main?.temp != nil ? "\((self.main!.temp! - 273.15).toStringWith(decimals: 1))°C" : "-"
     }
     
     public func humidityString() -> String {
-        return self.main?.humidity != nil ? "\((self.main!.humidity!).roundAtDecimal(1))%" : "-"
+        return self.main?.humidity != nil ? "\((self.main!.humidity!).toStringWith(decimals: 0))%" : "-"
     }
     
 }

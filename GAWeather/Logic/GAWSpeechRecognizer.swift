@@ -12,6 +12,7 @@ import Speech
 public class GAWSpeechRecognizer {
     
     //TODO implements locale
+    //TODO implements error on siri limit reached
     
     private static let speechTimerSilenceTimeout = 1.5
     private var speechSilenceTimer = Timer()

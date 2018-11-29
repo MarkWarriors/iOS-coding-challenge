@@ -9,6 +9,10 @@
 import UIKit
 
 extension Double {
+    public func toStringWith(decimals: Int) -> String {
+        return String.init(format: "%.\(decimals)f", self)
+    }
+    
     public func roundAtDecimal(_ decimal: Int) -> Double {
         let approx = Double(10^(decimal+1))
         return (self * approx).rounded() / approx

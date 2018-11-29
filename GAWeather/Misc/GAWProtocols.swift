@@ -20,7 +20,4 @@ public protocol CellViewModelBased where Self: UITableViewCell {
     var viewModel : ViewModel? { get set }
 }
 
-public protocol ViewModel {
-}
-
 public typealias WeatherInfo = (weatherImage: UIImage?, city: String, weather: String, temperature: String, humidity: String)

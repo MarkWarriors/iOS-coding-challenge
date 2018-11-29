@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GAWMainViewModel: ViewModel {
+class GAWMainViewModel {
     
     private let apiHandler : ApiHandler
     private let speechRecognizer : GAWSpeechRecognizer
