@@ -199,8 +199,8 @@
 		903D5E5A21AE9DDA00CEA95F /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				903D5E5B21AE9DDA00CEA95F /* Environments.swift */,
 				903D5E5C21AE9DDA00CEA95F /* AppDelegate.swift */,
+				903D5E5B21AE9DDA00CEA95F /* Environments.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
